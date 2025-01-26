@@ -1,0 +1,25 @@
+/* Dark Color Palette for the Personal Finance Tracker */
+
+/* Primary Colors */
+:root {
+    --primary-color: #2C2C2C; /* Dark Gray */
+    --secondary-color: #3E3E3E; /* Medium Dark Gray */
+    --accent-color: #5A5A5A; /* Gray Accent */
+    --background-color: #1A1A1A; /* Almost Black */
+    --text-color: #EAEAEA; /* Light Gray for Text */
+  }
+  
+  /* Neutral Colors */
+  :root {
+    --white: #FFFFFF;
+    --black: #000000;
+    --light-gray: #A6A6A6;
+    --dark-gray: #4D4D4D;
+  }
+  
+  /* Alerts and Warnings */
+  :root {
+    --success-color: #4CAF50; /* Retaining Green for Success */
+    --error-color: #F44336; /* Retaining Red for Errors */
+    --warning-color: #FFC107; /* Retaining Yellow for Warnings */
+  }
