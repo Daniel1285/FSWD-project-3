@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Finance Tracker - Login</title>
+  <title>Personal Finance Tracker</title>
   <link rel="stylesheet" href="css/color.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/index.css">
 </head>
-<body>
-  <header>
-    <h1>Personal Finance Tracker</h1>
-  </header>
 
-  <main class="login-container">
+<header>
+  <h1>Personal Finance Tracker</h1>
+</header>
+
+<body>
+  <main id="app-container" class="login-container">
+    <!-- Content dynamically loaded here -->
+  </main>
+
+  <!-- Templates -->
+  <template id="login-template">
     <section class="form-container">
-      <!-- Login Form -->
       <form id="login-form">
         <h2>Login</h2>
         <label for="login-email">Email</label>
@@ -29,9 +34,12 @@
           Don't have an account? <a href="#" id="register-link">Register here</a>.
         </p>
       </form>
+    </section>
+  </template>
 
-      <!-- Registration Form -->
-      <form id="register-form" style="display: none;">
+  <template id="register-template">
+    <section class="form-container">
+      <form id="register-form">
         <h2>Register</h2>
         <label for="reg-username">Username</label>
         <input type="text" id="reg-username" name="reg-username" placeholder="Enter your username" required>
@@ -51,7 +59,7 @@
         </p>
       </form>
     </section>
-  </main>
+  </template>
 
   <script src="js/main.js"></script>
 </body>

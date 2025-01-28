@@ -1,0 +1,143 @@
+[
+    {
+      "name": "Groceries",
+      "amount": 120.50,
+      "category": "Food",
+      "date": "25/01/2025",
+      "time": "14:30"
+    },
+    {
+      "name": "Taxi Ride",
+      "amount": 15.75,
+      "category": "Transport",
+      "date": "24/01/2025",
+      "time": "08:45"
+    },
+    {
+      "name": "Netflix Subscription",
+      "amount": 13.99,
+      "category": "Entertainment",
+      "date": "23/01/2025",
+      "time": "21:00"
+    },
+    {
+      "name": "Electricity Bill",
+      "amount": 75.00,
+      "category": "Utilities",
+      "date": "22/01/2025",
+      "time": "12:00"
+    },
+    {
+      "name": "Coffee",
+      "amount": 4.25,
+      "category": "Food",
+      "date": "21/01/2025",
+      "time": "09:15"
+    },
+    {
+      "name": "Gym Membership",
+      "amount": 50.00,
+      "category": "Health",
+      "date": "20/01/2025",
+      "time": "18:30"
+    },
+    {
+      "name": "Books",
+      "amount": 30.00,
+      "category": "Shopping",
+      "date": "19/01/2025",
+      "time": "15:00"
+    },
+    {
+      "name": "Fuel",
+      "amount": 45.60,
+      "category": "Transport",
+      "date": "18/01/2025",
+      "time": "07:20"
+    },
+    {
+      "name": "Dinner",
+      "amount": 60.00,
+      "category": "Food",
+      "date": "17/01/2025",
+      "time": "20:00"
+    },
+    {
+      "name": "Mobile Bill",
+      "amount": 25.99,
+      "category": "Utilities",
+      "date": "16/01/2025",
+      "time": "11:45"
+    },
+    {
+      "name": "Parking",
+      "amount": 5.00,
+      "category": "Transport",
+      "date": "15/01/2025",
+      "time": "10:30"
+    },
+    {
+      "name": "Haircut",
+      "amount": 20.00,
+      "category": "Personal Care",
+      "date": "14/01/2025",
+      "time": "16:00"
+    },
+    {
+      "name": "New Shoes",
+      "amount": 80.00,
+      "category": "Shopping",
+      "date": "13/01/2025",
+      "time": "13:15"
+    },
+    {
+      "name": "Amazon Order",
+      "amount": 150.00,
+      "category": "Shopping",
+      "date": "12/01/2025",
+      "time": "19:00"
+    },
+    {
+      "name": "Lunch",
+      "amount": 25.00,
+      "category": "Food",
+      "date": "11/01/2025",
+      "time": "12:45"
+    },
+    {
+      "name": "Laundry",
+      "amount": 10.00,
+      "category": "Utilities",
+      "date": "10/01/2025",
+      "time": "14:00"
+    },
+    {
+      "name": "Streaming Subscription",
+      "amount": 9.99,
+      "category": "Entertainment",
+      "date": "09/01/2025",
+      "time": "22:30"
+    },
+    {
+      "name": "Pet Food",
+      "amount": 40.00,
+      "category": "Shopping",
+      "date": "08/01/2025",
+      "time": "17:30"
+    },
+    {
+      "name": "Car Maintenance",
+      "amount": 250.00,
+      "category": "Transport",
+      "date": "07/01/2025",
+      "time": "08:00"
+    },
+    {
+      "name": "Snacks",
+      "amount": 7.50,
+      "category": "Food",
+      "date": "06/01/2025",
+      "time": "10:45"
+    }
+  ]
+  
