@@ -138,6 +138,20 @@
       "category": "Food",
       "date": "06/01/2025",
       "time": "10:45"
+    },
+    {
+      "name": "Coffee",
+      "amount": 300,
+      "category": "Food",
+      "date": "21/02/2025",
+      "time": "09:15"
+    },
+    {
+      "name": "Pet Food",
+      "amount": 40.00,
+      "category": "Shopping",
+      "date": "08/02/2025",
+      "time": "17:30"
     }
   ]
   

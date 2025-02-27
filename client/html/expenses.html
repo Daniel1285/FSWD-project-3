@@ -77,12 +77,20 @@
   </template>
 
   <template id="expense-analysis-template">
+    <h2>Expense Analysis</h2>
     <section id="expense-analysis">
-      <h2>Expense Analysis</h2>
+      <div class="month">
+        <!-- 🗓️ Month Selection Dropdown -->
+        <label for="month-filter">Select month:</label>
+        <select id="month-filter">
+          <option value="all">All Expenses</option>
+        </select>
+      </div>
       <canvas id="expenseChart"></canvas>
       <button id="back-to-expenses">Back to Expenses</button>
     </section>
   </template>
+  
   
 
   <script src="../js/expenses.js"></script>

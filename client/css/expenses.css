@@ -233,6 +233,7 @@
 
 #expense-analysis-template{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 30vh;
@@ -258,6 +259,55 @@
   box-shadow: 0 4px 8px var(--dark-gray);
 }
 
+.month{
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.month h2 {
+  color: var(--white);
+  font-weight: bold;
+  font-size: 2rem;
+}
+#month-filter, .month{
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    height: auto;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--accent-color);
+}
+
+/* Dropdown option styling */
+#month-filter option {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  text-align: center;
+}
+
+#month-filter select, .month select {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+
+#month-filter:hover,
+#month-filter:focus {
+    border-color: var(--light-gray);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    
+}
 
 /* 🔙 Back Button */
 #back-to-expenses,

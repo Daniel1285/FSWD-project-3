@@ -44,7 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
     } else if (templateId === "expense-analysis-template") {
       generateExpenseChart(expenses);
-      // ✅ Handle "Back to Expenses" button click
+      populateMonthDropdown(expenses);
+      document.getElementById("month-filter").addEventListener("change", () => {
+        generateExpenseChart(expenses);
+      });
+
+      // Handle "Back to Expenses" button click
       const backButton = document.getElementById("back-to-expenses");
       if (backButton) {
         backButton.addEventListener("click", () => {
@@ -212,13 +217,14 @@ const convertDateToInputFormat = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
+let expenseChartInstance = null; // Store the Chart instance globally
+
 const generateExpenseChart = (expenses) => {
   if (!expenses || expenses.length === 0) {
     console.error("No expenses available for analysis.");
     return;
   }
 
-  // Ensure the canvas element exists
   const canvas = document.getElementById("expenseChart");
   if (!canvas) {
     console.error("Chart container not found.");
@@ -226,9 +232,28 @@ const generateExpenseChart = (expenses) => {
   }
 
   const ctx = canvas.getContext("2d");
+  const selectedMonth = document.getElementById("month-filter").value;
 
-  // Aggregate expenses by category
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  // 🎯 Filter expenses based on selected month
+  let filteredExpenses = expenses;
+  if (selectedMonth !== "all") {
+    filteredExpenses = expenses.filter(expense => {
+      const [day, month, year] = expense.date.split("/").map(Number);
+      return month === Number(selectedMonth);
+    });
+  }
+
+  // 🛑 If no expenses in selected month, clear chart & show warning
+  if (filteredExpenses.length === 0) {
+    if (expenseChartInstance) {
+      expenseChartInstance.destroy(); // Remove previous chart
+    }
+    console.warn("No expenses found for the selected month.");
+    return;
+  }
+
+  // 🎯 Aggregate filtered expenses by category
+  const categoryTotals = filteredExpenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + parseFloat(expense.amount);
     return acc;
   }, {});
@@ -236,18 +261,18 @@ const generateExpenseChart = (expenses) => {
   const categories = Object.keys(categoryTotals);
   const totals = Object.values(categoryTotals);
 
+  // 🎨 Color Palette (Bright Colors)
   const colorPalette = [
-    "#FF4D4D", // Bright Red
-    "#4D79FF", // Bright Blue
-    "#4DFF4D", // Bright Green
-    "#B366FF", // Bright Purple
-    "#FFFF66", // Bright Yellow
-    "#FFA64D", // Bright Orange
-    "#B3B3B3"  // Bright Gray
+    "#FF4D4D", "#4D79FF", "#4DFF4D", "#B366FF", "#FFFF66", "#FFA64D", "#B3B3B3"
   ];
-  
-  
-  new Chart(ctx, {
+
+  // 🗑️ Destroy old chart before creating a new one
+  if (expenseChartInstance) {
+    expenseChartInstance.destroy();
+  }
+
+  // 🥧 Create the Pie Chart
+  expenseChartInstance = new Chart(ctx, {
     type: "pie",
     data: {
       labels: categories,
@@ -255,22 +280,36 @@ const generateExpenseChart = (expenses) => {
         label: "Total Expenses",
         data: totals,
         backgroundColor: colorPalette.slice(0, categories.length),
-        
       }]
     },
     options: {
       plugins: {
         legend: {
           labels: {
-            color: "#FFFFFF", 
-            font: {
-              size: 14, 
-            },
-            padding: 20, 
+            color: "#FFFFFF",
+            font: { size: 14 },
+            padding: 20
           },
-          position: "top", // ✅ Move legend above the chart
+          position: "top"
         }
       },
     }
+  });
+};
+
+
+const populateMonthDropdown = (expenses) => {
+  const monthDropdown = document.getElementById("month-filter");
+  monthDropdown.innerHTML = '<option value="all">All Expenses</option>'; // Reset
+
+  const months = new Set();
+  expenses.forEach(expense => {
+    const month = expense.date.split("/")[1]; // Extract month (MM)
+    months.add(month);
+  });
+
+  // Sort months in order and add to dropdown
+  [...months].sort().forEach(month => {
+    monthDropdown.innerHTML += `<option value="${month}">${month}</option>`;
   });
 };
