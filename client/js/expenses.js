@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const appContainer = document.getElementById("app-container");
   let editingRowIndex = null; // Track the index of the row being edited
-  const expenses = []; // Array to store all expenses
+  let expenses = []; // Array to store all expenses
 
   // Fetch expenses data from JSON file
   const fetchExpensesData = () => {
-    fetch("../../server/data.json") // Corrected relative path
+    fetch("../../server/data.json") // Correct relative path
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to fetch expenses: ${response.statusText}`);
@@ -13,26 +13,47 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then(data => {
-        expenses.push(...data); // Add fetched data to expenses array
+        expenses = data; // Corrected: Now assigns the fetched data to the global expenses array
         loadTemplate("expenses-list-template"); // Render the table
       })
       .catch(error => console.error("Error loading expenses:", error));
   };
+  
 
-  // Function to load templates
   const loadTemplate = (templateId) => {
     const template = document.getElementById(templateId);
     const content = template.content.cloneNode(true);
     appContainer.innerHTML = ""; // Clear current content
     appContainer.appendChild(content);
-
-    // Add event listeners for specific templates
+  
     if (templateId === "expenses-list-template") {
       renderExpensesTable();
+  
+      // Handle Expense Analysis button click
+      const expenseAnalysisButton = document.getElementById("expense-analysis-button");
+      expenseAnalysisButton.addEventListener("click", () => {
+        if (expenses.length > 0) {
+          loadTemplate("expense-analysis-template");
+        } else {
+          console.error("No expenses available for analysis.");
+        }
+      });
+  
     } else if (templateId === "add-expense-template") {
       setupAddExpenseForm();
+  
+    } else if (templateId === "expense-analysis-template") {
+      generateExpenseChart(expenses);
+      // ✅ Handle "Back to Expenses" button click
+      const backButton = document.getElementById("back-to-expenses");
+      if (backButton) {
+        backButton.addEventListener("click", () => {
+          loadTemplate("expenses-list-template"); // Navigate back to expenses list
+        });
+      }
     }
   };
+  
 
   // Render the Expenses List table (SORTED by Date & Time)
   const renderExpensesTable = () => {
@@ -189,4 +210,67 @@ const convertDateToDisplayFormat = (dateString) => {
 const convertDateToInputFormat = (dateString) => {
   const [day, month, year] = dateString.split("/");
   return `${year}-${month}-${day}`;
+};
+
+const generateExpenseChart = (expenses) => {
+  if (!expenses || expenses.length === 0) {
+    console.error("No expenses available for analysis.");
+    return;
+  }
+
+  // Ensure the canvas element exists
+  const canvas = document.getElementById("expenseChart");
+  if (!canvas) {
+    console.error("Chart container not found.");
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  // Aggregate expenses by category
+  const categoryTotals = expenses.reduce((acc, expense) => {
+    acc[expense.category] = (acc[expense.category] || 0) + parseFloat(expense.amount);
+    return acc;
+  }, {});
+
+  const categories = Object.keys(categoryTotals);
+  const totals = Object.values(categoryTotals);
+
+  const colorPalette = [
+    "#FF4D4D", // Bright Red
+    "#4D79FF", // Bright Blue
+    "#4DFF4D", // Bright Green
+    "#B366FF", // Bright Purple
+    "#FFFF66", // Bright Yellow
+    "#FFA64D", // Bright Orange
+    "#B3B3B3"  // Bright Gray
+  ];
+  
+  
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: categories,
+      datasets: [{
+        label: "Total Expenses",
+        data: totals,
+        backgroundColor: colorPalette.slice(0, categories.length),
+        
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: "#FFFFFF", 
+            font: {
+              size: 14, 
+            },
+            padding: 20, 
+          },
+          position: "top", // ✅ Move legend above the chart
+        }
+      },
+    }
+  });
 };

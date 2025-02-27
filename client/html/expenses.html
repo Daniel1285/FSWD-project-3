@@ -10,7 +10,7 @@
 </head>
 <body>
   <header>
-    <h1>Manage Your Expenses <img src="../static/icons/dollar.svg" alt="dollar"></h1>
+    <h1>Manage Your Expenses</h1>
     <button id="add-expense-button">➕</button>
   </header>
 
@@ -36,7 +36,9 @@
           <!-- Dynamic rows will be added here -->
         </tbody>
       </table>
+
     </section>
+    <button id="expense-analysis-button">Expense Analysis</button>
   </template>
 
   <template id="add-expense-template">
@@ -74,6 +76,17 @@
     </section>
   </template>
 
+  <template id="expense-analysis-template">
+    <section id="expense-analysis">
+      <h2>Expense Analysis</h2>
+      <canvas id="expenseChart"></canvas>
+      <button id="back-to-expenses">Back to Expenses</button>
+    </section>
+  </template>
+  
+
   <script src="../js/expenses.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 </html>

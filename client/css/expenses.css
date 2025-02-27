@@ -229,3 +229,55 @@
 .delete-expense:hover .action-icon {
   filter: brightness(1.5) saturate(2) hue-rotate(-20deg);
 }
+
+
+#expense-analysis-template{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+}
+/* 🎨 Expense Analysis Page */
+#expense-analysis {
+  margin: 0 0 0 30% ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--background-color);
+  height: 100vh;
+  max-width: 600px;
+}
+
+/* 🥧 Chart Container */
+#expenseChart {
+  background-color: var(--secondary-color);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px var(--dark-gray);
+}
+
+
+/* 🔙 Back Button */
+#back-to-expenses,
+#expense-analysis-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  background-color: var(--accent-color);
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#back-to-expenses:hover,
+#expense-analysis-button:hover {
+  background-color: var(--light-gray);
+  color: var(--black);
+}
+
+#expense-analysis-button{
+  margin: 3rem 0 0 45% ;
+}
