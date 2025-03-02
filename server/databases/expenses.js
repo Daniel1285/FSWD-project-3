@@ -1,48 +1,52 @@
 //  simulate a database for expenses using the localStorage
 const DB_NAME = "expenses";
 
-function getExpenses() {
-  return JSON.parse(localStorage.getItem(DB_NAME)) || [];
+function getExpenses(name) {
+  return JSON.parse(localStorage.getItem(DB_NAME))[name] || [];
 }
 
-function postExpense(expense) {
+function saveToLocalStorage(name, data) {
+  let prev = JSON.parse(localStorage.getItem(DB_NAME) || "{}");
+  prev[name] = data;
+  localStorage.setItem(DB_NAME, JSON.stringify(prev));
+}
+
+function postExpense(name, expense) {
   let data = {
     expense: expense,
-    id: getExpenses().length + 1
+    id: getExpenses(name).at(-1).id + 1 || 1
   };
 
-  let expenses = getExpenses();
+  let expenses = getExpenses(name);
   expenses.push(data);
-  localStorage.setItem(DB_NAME, JSON.stringify(expenses));
+  saveToLocalStorage(name, expenses);
   return true;
 }
 
-function putExpense(id, expense) {
+function putExpense(name, id, expense) {
   let data = {
     expense: expense,
     id: id
   };
 
-  let expenses = getExpenses();
+  let expenses = getExpenses(name);
   let index = expenses.findIndex((e) => e.id == id);
   if (index == -1) {
     return false;
   }
   expenses[index] = data;
-  localStorage.setItem(DB_NAME, JSON.stringify(expenses));
-
+  saveToLocalStorage(name, expenses);
   return true;
 }
 
-function deleteExpense(id) {
-  let expenses = getExpenses();
+function deleteExpense(name, id) {
+  let expenses = getExpenses(name);
   let index = expenses.findIndex((e) => e.id === id);
   if (index == -1) {
     return false;
   }
   expenses.splice(index, 1);
-  localStorage.setItem(DB_NAME, JSON.stringify(expenses));
-
+  saveToLocalStorage(name, expenses);
   return true;
 }
 
