@@ -65,6 +65,4 @@ class ExpensesServer {
     }
 }
 
-const expensesServer = new ExpensesServer(database);
-
-export { expensesServer };
+export { ExpensesServer };

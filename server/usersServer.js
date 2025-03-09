@@ -49,11 +49,14 @@ class UsersServer {
                     let user = JSON.parse(request.data);
                     response.body = this.createUser(user);
                 } else if (request.url.endsWith("/connect")) {
-                    let { name, password } = JSON.parse(request.data);
+                    let user = JSON.parse(request.data);
                     response.body = this.connectUser(name, password);
                 } else if (request.url.endsWith("/disconnect")) {
                     this.disconnectUser();
                     response.body = true;
+                }else {
+                    response.success = false;
+                    response.body = "Invalid request method";
                 }
                 break;
             case "PUT":
@@ -78,6 +81,5 @@ class UsersServer {
     }
 }
 
-const usersServer = new UsersServer(database);
 
-export { usersServer };
+export { UsersServer };

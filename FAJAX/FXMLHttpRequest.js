@@ -1,8 +1,7 @@
-import network from "../network/network.js";
+import { Network } from "../network/network.js";
 
 class FXMLHttpRequest {
     constructor() {
-        console.log("FXMLHttpRequest constructor");
         this.responseText = "";
     }
 
@@ -16,7 +15,8 @@ class FXMLHttpRequest {
 
     send(data = null, callback = () => {}) {
         this.data = data;
-        network.request(this, callback);
+        var net = new Network();
+        net.request(this, callback);
     }
 }
 
