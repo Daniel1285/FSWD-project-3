@@ -12,7 +12,7 @@ class Network {
     request(request, callback) {
         sleep();
         if (Math.random() < this.dropRate) {
-            request.responseText = JSON.stringify({"success":false, body: ""});
+            request.responseText = JSON.stringify({"success":false, body: "Network error"});
             callback();
             return;
         } else{
@@ -20,7 +20,7 @@ class Network {
                 this.userServer.request(request, () => {
                     sleep();
                     if (Math.random() < this.dropRate) {
-                        request.responseText = JSON.stringify({"success":false, body: ""});
+                        request.responseText = JSON.stringify({"success":false, body: "Network error"});
                     }
                     callback();
                 });
@@ -29,7 +29,7 @@ class Network {
                 this.expensesServer.request(request, () => {
                     sleep();
                     if (Math.random() < this.dropRate) {
-                        request.responseText = JSON.stringify({"success":false, body: ""});
+                        request.responseText = JSON.stringify({"success":false, body: "Network error"});
                     }
                     callback();
                 });
@@ -41,3 +41,7 @@ class Network {
         setTimeout(() => {}, Math.floor(Math.random() * (this.maxDelay - this.minDelay)) + this.minDelay);
     }
 }
+
+const network = new Network();
+
+export default { network };
