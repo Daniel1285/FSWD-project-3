@@ -1,3 +1,5 @@
+
+
 /* Container */
 .expenses-container {
     display: flex;
@@ -125,12 +127,17 @@
 .delete-expense:hover {
   background-color: var(--dark-gray);
 }
-  
+
+.user-container {
+  position: fixed;
+  top: 20px !important;
+  right: 20px;
+}
 
 /* Add Expense Button */
-#add-expense-button {
+#add-expense-button, .user-container{
   position: fixed;
-  top: 20px;
+  top: 92%;
   right: 20px;
   background-color: var(--accent-color); 
   color: var(--white); 
@@ -147,10 +154,13 @@
 }
 
   
-#add-expense-button:hover {
+#add-expense-button:hover,
+ .user-container:hover {
   background-color: var(--light-gray);
   color: var(--black);
 }
+
+
 
 /* Add Expense Container */
 .add-expense-container {
