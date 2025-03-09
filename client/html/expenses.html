@@ -12,10 +12,15 @@
   <header>
     <h1>Manage Your Expenses</h1>
     <button id="add-expense-button">➕</button>
+    <div class="user-container">
+      <img src="../static/icons/user.svg" alt="User Icon" class="user-icon" id="userIcon">
+      <span id="usernameDisplay" style="display: none;">Hello, User</span>
+  </div>
   </header>
 
   <main id="app-container">
     <!-- Content dynamically loaded here -->
+
   </main>
 
   <!-- Templates -->
@@ -92,7 +97,6 @@
   </template>
   
   
-
   <script src="../js/expenses.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
