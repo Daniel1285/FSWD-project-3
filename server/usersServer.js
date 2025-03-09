@@ -21,6 +21,7 @@ class UsersServer {
             return false;
         }
         this.database.currentUser.postCurrentUser(user);
+        return true;
     }
 
     disconnectUser() {
@@ -79,10 +80,11 @@ class UsersServer {
                 }
                 break;
             default:
+                console.log(request.url);
                 response.success = false;
                 response.body = "Invalid request method";
         }
-
+        console.log(response);
         request.responseText = JSON.stringify(response);
         callback();
     }
