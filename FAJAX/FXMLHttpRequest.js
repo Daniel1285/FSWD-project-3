@@ -1,3 +1,5 @@
+import network from "../network/network";
+
 class FXMLHttpRequest {
     constructor() {
         this.readyState = 0;
@@ -16,7 +18,6 @@ class FXMLHttpRequest {
 
     send(data = null, callback = () => {}) {
         this.data = data;
-        let net = new network();
-        net.request(this, callback);
+        network.request(this, callback);
     }
 }
