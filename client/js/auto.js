@@ -1,11 +1,11 @@
 import { FXMLHttpRequest } from "../../FAJAX/FXMLHttpRequest.js";
-// import { loadTemplate } from "./expenses.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const appContainer = document.getElementById("app-container");
     let userIcon = document.getElementById("userIcon");
 
-    // Function to load templates
-    const loadTemplate = (templateId) => {
+      // Function to load templates
+      const loadTemplate = (templateId) => {
         const template = document.getElementById(templateId);
         const content = template.content.cloneNode(true);
         appContainer.innerHTML = ""; // Clear existing content
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let response = JSON.parse(sendLogin.responseText);
                 if (response.success) {
                     alert("Login successful!");
+                    location.reload();
                     userIcon.onclick = handleLogout
                     userIcon.src = "static/icons/log-out.svg";
                     loadTemplate('expenses-list-template')
@@ -127,9 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-
-
-
 
     pageInitialization()
 });

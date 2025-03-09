@@ -18,24 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Error");
       }
     })
-    // Example data:
-    
-    // fetch("../../server/data.json") // Correct relative path
-    //   .then(response => {
-    //     if (!response.ok) {
-    //       throw new Error(`Failed to fetch expenses: ${response.statusText}`);
-    //     }
-    //     return response.json();
-    //   })
-    //   .then(data => {
-    //     expenses = data; // Corrected: Now assigns the fetched data to the global expenses array
-    //     loadTemplate("expenses-list-template"); // Render the table
-    //   })
-    //   .catch(error => console.error("Error loading expenses:", error)); 
   }; 
   
 
-  const loadTemplate = (templateId) => {
+  function loadTemplate(templateId){
     const template = document.getElementById(templateId);
     const content = template.content.cloneNode(true);
     appContainer.innerHTML = ""; // Clear current content
@@ -153,15 +139,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const formattedDate = convertDateToDisplayFormat(date);
   
       const newExpense = { name, amount, category, date: formattedDate, time };
-      var request = new FXMLHttpRequest()
-      request.open("POST","/expenses/expenses");
-      request.send(JSON.stringify(newExpense)); 
+      
       if (editingRowIndex !== null) {
         // Update existing expense
+        var id = expenses[editingRowIndex].id
         expenses[editingRowIndex] = newExpense;
+        var request = new FXMLHttpRequest();
+        request.open("PUT","/expenses/expenses/" + id);
+        request.send(JSON.stringify(newExpense)); 
         editingRowIndex = null; // Clear editing state
       } else {
         // Add new expense
+        var request = new FXMLHttpRequest()
+        request.open("POST","/expenses/expenses");
+        request.send(JSON.stringify(newExpense)); 
         expenses.push(newExpense);
       }
   
@@ -208,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Edit an expense
   const editExpense = (index) => {
-    editingRowIndex = index; // Track the index being edited
+    editingRowIndex = index;
     loadTemplate("add-expense-template");
   };
 
