@@ -1,11 +1,9 @@
-import network from "../network/network";
+import network from "../network/network.js";
 
 class FXMLHttpRequest {
     constructor() {
-        this.readyState = 0;
-        this.status = 0;
+        console.log("FXMLHttpRequest constructor");
         this.responseText = "";
-        this.onreadystatechange = null;
     }
 
     open(method, url, async=true, username="", password = "") {
@@ -21,3 +19,5 @@ class FXMLHttpRequest {
         network.request(this, callback);
     }
 }
+
+export {FXMLHttpRequest};

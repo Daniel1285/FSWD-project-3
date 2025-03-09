@@ -1,5 +1,5 @@
-import { expensesServer } from "./expensesServer";
-import { usersServer } from "./usersServer";
+import { expensesServer } from "./expensesServer.js";
+import { usersServer } from "./usersServer.js";
 
 const server = {
     expensesServer,

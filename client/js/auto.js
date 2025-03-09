@@ -1,4 +1,4 @@
-import {FXMLHttpRequest} from "../FAJAX/FXMLHttpRequest.js"
+import {FXMLHttpRequest} from "../../FAJAX/FXMLHttpRequest.js"
 
 document.addEventListener("DOMContentLoaded", () => {
     const appContainer = document.getElementById("app-container");
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             password: password
           }
 
-        // Redirect to dashboard or show success message
+        // Redirect to dashboard or show success message  
         var sendLogin = new FXMLHttpRequest()
         sendLogin.open("POST", "/users/login")
         sendLogin.send(user, ()=>{
