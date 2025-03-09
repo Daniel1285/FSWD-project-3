@@ -49,8 +49,15 @@ class UsersServer {
                     let user = JSON.parse(request.data);
                     response.body = this.createUser(user);
                 } else if (request.url.endsWith("/connect")) {
-                    let user = JSON.parse(request.data);
-                    response.body = this.connectUser(name, password);
+                    console.log(request.data);
+                    let { name, password } = JSON.parse(request.data);
+                    if(this.connectUser(name, password)){
+                        response.body = true;
+                    }
+                    else{
+                        response.success = false;
+                        response.body = 'Invalid username or password';
+                    }
                 } else if (request.url.endsWith("/disconnect")) {
                     this.disconnectUser();
                     response.body = true;

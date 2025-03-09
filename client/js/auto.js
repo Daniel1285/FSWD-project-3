@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let sendLogin = new FXMLHttpRequest();
             sendLogin.open("POST", "/users/connect");
-            sendLogin.send(user, () => {
+            sendLogin.send(JSON.stringify(user), () => {
               console.log(sendLogin.responseText);
                 let response = JSON.parse(sendLogin.responseText);
                 if (response.success) {
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 let sendRegistration = new FXMLHttpRequest();
                 sendRegistration.open("POST", "/users/create");
-                sendRegistration.send(user, () => {
+                sendRegistration.send(JSON.stringify(user), () => {
                     let response = JSON.parse(sendRegistration.responseText);
                     if (response.success) {
                         alert("Registration successful!");
