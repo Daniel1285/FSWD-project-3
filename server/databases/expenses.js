@@ -12,29 +12,24 @@ function saveToLocalStorage(name, data) {
 }
 
 function postExpense(name, expense) {
-  let data = {
-    expense: expense,
-    id: getExpenses(name).at(-1).id + 1 || 1
-  };
+  expense.id = getExpenses(name).at(-1) ? getExpenses(name).at(-1).id + 1 : 1;
+
 
   let expenses = getExpenses(name);
-  expenses.push(data);
+  expenses.push(expense);
   saveToLocalStorage(name, expenses);
   return true;
 }
 
 function putExpense(name, id, expense) {
-  let data = {
-    expense: expense,
-    id: id
-  };
+  expense.id = id;
 
   let expenses = getExpenses(name);
   let index = expenses.findIndex((e) => e.id == id);
   if (index == -1) {
     return false;
   }
-  expenses[index] = data;
+  expenses[index] = expense;
   saveToLocalStorage(name, expenses);
   return true;
 }
@@ -50,11 +45,18 @@ function deleteExpense(name, id) {
   return true;
 }
 
+function init() {
+  if (!localStorage.getItem(DB_NAME)) {
+    localStorage.setItem(DB_NAME, "{}");
+  }
+}
+
 const expenses = {
   getExpenses,
   postExpense,
   putExpense,
   deleteExpense,
+  init
 };
 
-export { expenses };
+export { expenses };

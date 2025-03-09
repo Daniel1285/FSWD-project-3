@@ -67,6 +67,16 @@ class UsersServer {
                     response.body = "Invalid request method";
                 }
                 break;
+            case "GET":
+                if (request.url.endsWith("/currentUser")) {
+                    if (!this.database.currentUser.getCurrentUser()) {
+                        response.success = false;
+                        response.body = "No user connected";
+                    } else {
+                        response.body = this.database.currentUser.getCurrentUser();
+                    }
+                }
+                break;
             case "PUT":
                 if (request.url.endsWith("/changePassword")) {
                     let { name, password } = JSON.parse(request.data);

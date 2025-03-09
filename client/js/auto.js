@@ -1,7 +1,8 @@
 import { FXMLHttpRequest } from "../../FAJAX/FXMLHttpRequest.js";
-
+// import { loadTemplate } from "./expenses.js";
 document.addEventListener("DOMContentLoaded", () => {
     const appContainer = document.getElementById("app-container");
+    let userIcon = document.getElementById("userIcon");
 
     // Function to load templates
     const loadTemplate = (templateId) => {
@@ -46,8 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 let response = JSON.parse(sendLogin.responseText);
                 if (response.success) {
                     alert("Login successful!");
+                    userIcon.onclick = handleLogout
+                    userIcon.src = "static/icons/log-out.svg";
+                    loadTemplate('expenses-list-template')
+                    
                 } else {
-                    alert("Login failed: " + response.error);
+                    alert("Login failed: " + response.body);
                 }
             });
         }
@@ -76,8 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (response.success) {
                         alert("Registration successful!");
                         loadTemplate("login-template");
+                        
                     } else {
-                        alert("Registration failed: " + response.error);
+                        alert("Registration failed: " + response.body);
                     }
                 });
             } else {
@@ -86,6 +92,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Load the login form initially
-    loadTemplate("login-template");
+
+    function handleLogout() {
+      let confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+          let logoutRequest = new FXMLHttpRequest();
+          logoutRequest.open("POST", "/usersServer/disconnect");
+          logoutRequest.send(null, () => {
+              let logoutResponse = JSON.parse(logoutRequest.responseText);
+              if (logoutResponse.success) {
+                alert("Logout successful!");
+                userIcon.src =  "static/icons/user.svg";
+                loadTemplate("login-template");
+          }else {
+              alert("Logout failed: " + logoutResponse.body);
+          }
+      
+      })
+    }
+  }
+
+    function pageInitialization(){
+      let request = new FXMLHttpRequest();
+      request.open("GET", "/users/currentUser");
+      request.send(null, () => {
+        let response = JSON.parse(request.responseText);
+        if (response.success) { // if axis user 
+          userIcon.src = "static/icons/log-out.svg"; // Change icon to log-out
+          
+          userIcon.onclick = handleLogout
+          loadTemplate("expenses-list-template");
+        } else {
+          loadTemplate("login-template");
+        }
+      });
+    }
+
+
+
+
+    pageInitialization()
 });
+
+

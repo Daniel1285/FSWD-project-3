@@ -6,8 +6,8 @@ class Network {
         this.userServer = new UsersServer();
         this.expensesServer = new ExpensesServer();
         this.dropRate = 0.1;
-        this.minDelay = 1000;
-        this.maxDelay = 3000;
+        this.minDelay = 0;
+        this.maxDelay = 0;
     }
 
     async request(request, callback) {

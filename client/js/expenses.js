@@ -1,3 +1,4 @@
+import { FXMLHttpRequest } from "../../FAJAX/FXMLHttpRequest.js";
 document.addEventListener("DOMContentLoaded", () => {
   const appContainer = document.getElementById("app-container");
   let editingRowIndex = null; // Track the index of the row being edited
@@ -5,19 +6,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fetch expenses data from JSON file
   const fetchExpensesData = () => {
-    fetch("../../server/data.json") // Correct relative path
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch expenses: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        expenses = data; // Corrected: Now assigns the fetched data to the global expenses array
-        loadTemplate("expenses-list-template"); // Render the table
-      })
-      .catch(error => console.error("Error loading expenses:", error));
-  };
+   
+    const request = new FXMLHttpRequest()
+    request.open("GET","/expenses/expenses");
+    request.send(null,()=>{
+      var respond = JSON.parse(request.responseText);
+      if (respond.success) {
+        expenses = respond.body;
+        loadTemplate("expenses-list-template");
+      }else{
+        alert("Error");
+      }
+    })
+    // Example data:
+    
+    // fetch("../../server/data.json") // Correct relative path
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error(`Failed to fetch expenses: ${response.statusText}`);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     expenses = data; // Corrected: Now assigns the fetched data to the global expenses array
+    //     loadTemplate("expenses-list-template"); // Render the table
+    //   })
+    //   .catch(error => console.error("Error loading expenses:", error)); 
+  }; 
   
 
   const loadTemplate = (templateId) => {
@@ -138,7 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const formattedDate = convertDateToDisplayFormat(date);
   
       const newExpense = { name, amount, category, date: formattedDate, time };
-  
+      var request = new FXMLHttpRequest()
+      request.open("POST","/expenses/expenses");
+      request.send(JSON.stringify(newExpense)); 
       if (editingRowIndex !== null) {
         // Update existing expense
         expenses[editingRowIndex] = newExpense;
@@ -180,10 +197,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <td>${time}</td>
       <td>
         <button class="edit-expense" title="Edit">
-          <img src="../static/icons/edit.svg" alt="Edit" class="action-icon">
+          <img src="static/icons/edit.svg" alt="Edit" class="action-icon">
         </button>
         <button class="delete-expense" title="Delete">
-          <img src="../static/icons/trash.svg" alt="Delete" class="action-icon">
+          <img src="static/icons/trash.svg" alt="Delete" class="action-icon">
         </button>
       </td>
     `;
@@ -197,7 +214,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Delete an expense
   const deleteExpense = (index) => {
+    var id = expenses[index].id
     expenses.splice(index, 1); // Remove the expense from the array
+    var request = new FXMLHttpRequest();
+    request.open("DELETE","/expenses/expenses/" + id);
+    console.log(index);
+    console.log(id);
+    request.send();  // Send DELETE request to server
     renderExpensesTable(); // Re-render the table
   };
 
@@ -234,7 +257,7 @@ const generateExpenseChart = (expenses) => {
   const ctx = canvas.getContext("2d");
   const selectedMonth = document.getElementById("month-filter").value;
 
-  // 🎯 Filter expenses based on selected month
+  //  Filter expenses based on selected month
   let filteredExpenses = expenses;
   if (selectedMonth !== "all") {
     filteredExpenses = expenses.filter(expense => {
@@ -243,7 +266,7 @@ const generateExpenseChart = (expenses) => {
     });
   }
 
-  // 🛑 If no expenses in selected month, clear chart & show warning
+  //  If no expenses in selected month, clear chart & show warning
   if (filteredExpenses.length === 0) {
     if (expenseChartInstance) {
       expenseChartInstance.destroy(); // Remove previous chart
@@ -252,7 +275,7 @@ const generateExpenseChart = (expenses) => {
     return;
   }
 
-  // 🎯 Aggregate filtered expenses by category
+  // Aggregate filtered expenses by category
   const categoryTotals = filteredExpenses.reduce((acc, expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + parseFloat(expense.amount);
     return acc;
@@ -261,17 +284,17 @@ const generateExpenseChart = (expenses) => {
   const categories = Object.keys(categoryTotals);
   const totals = Object.values(categoryTotals);
 
-  // 🎨 Color Palette (Bright Colors)
+  // Color Palette (Bright Colors)
   const colorPalette = [
     "#FF4D4D", "#4D79FF", "#4DFF4D", "#B366FF", "#FFFF66", "#FFA64D", "#B3B3B3"
   ];
 
-  // 🗑️ Destroy old chart before creating a new one
+  //  Destroy old chart before creating a new one
   if (expenseChartInstance) {
     expenseChartInstance.destroy();
   }
 
-  // 🥧 Create the Pie Chart
+  // Create the Pie Chart
   expenseChartInstance = new Chart(ctx, {
     type: "pie",
     data: {
@@ -313,3 +336,4 @@ const populateMonthDropdown = (expenses) => {
     monthDropdown.innerHTML += `<option value="${month}">${month}</option>`;
   });
 };
+

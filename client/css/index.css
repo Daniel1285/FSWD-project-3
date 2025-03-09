@@ -1,45 +1,6 @@
 /* Import the color palette */
 @import url('color.css');
 
-/* Global Styles */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  font-weight: bold;
-}
-
-a {
-  text-decoration: none;
-  color: var(--accent-color);
-}
-
-a:hover {
-  color: var(--light-gray);
-}
-
-/* Header */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  padding: 1rem 2rem;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--white);
-}
 
 /* Login and Registration Page */
 .login-container {

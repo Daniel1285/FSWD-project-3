@@ -2,6 +2,7 @@ import database from "./databases/database.js";
 class ExpensesServer {
     constructor() {
         this.database = database;
+        this.database.expenses.init();
     }
 
     getUserExpenses() {
