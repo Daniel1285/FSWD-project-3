@@ -4,21 +4,22 @@
 
 /* Login and Registration Page */
 .login-container {
-  margin-top: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  margin-top: 2rem;
   background-color: var(--background-color);
 }
 
 .form-container {
-  width: 30%;
+  width: 40%;
   background-color: var(--secondary-color);
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px var(--dark-gray);
   text-align: center;
+  margin: 5%  0 0 27% ;
 }
 
 .form-container h1 {

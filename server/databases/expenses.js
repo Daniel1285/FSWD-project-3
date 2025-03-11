@@ -13,8 +13,6 @@ function saveToLocalStorage(name, data) {
 
 function postExpense(name, expense) {
   expense.id = getExpenses(name).at(-1) ? getExpenses(name).at(-1).id + 1 : 1;
-
-
   let expenses = getExpenses(name);
   expenses.push(expense);
   saveToLocalStorage(name, expenses);
@@ -59,4 +57,4 @@ const expenses = {
   init
 };
 
-export { expenses };
+export{expenses};

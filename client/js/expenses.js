@@ -1,12 +1,13 @@
 import { FXMLHttpRequest } from "../../FAJAX/FXMLHttpRequest.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const appContainer = document.getElementById("app-container");
+  let userIcon = document.getElementById("userIcon");
   let editingRowIndex = null; // Track the index of the row being edited
   let expenses = []; // Array to store all expenses
 
-  // Fetch expenses data from JSON file
+  // Function that loads all the expenses of the current user.
   const fetchExpensesData = () => {
-   
     const request = new FXMLHttpRequest()
     request.open("GET","/expenses/expenses");
     request.send(null,()=>{
@@ -15,12 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
         expenses = respond.body;
         loadTemplate("expenses-list-template");
       }else{
-        alert("Error");
+        alert(JSON.parse(request.responseText).body);
       }
     })
   }; 
   
-
+  //Loads and displays the specified template, initializing relevant event listeners and functionalities.
   function loadTemplate(templateId){
     const template = document.getElementById(templateId);
     const content = template.content.cloneNode(true);
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     if (templateId === "expenses-list-template") {
       renderExpensesTable();
-  
+
       // Handle Expense Analysis button click
       const expenseAnalysisButton = document.getElementById("expense-analysis-button");
       expenseAnalysisButton.addEventListener("click", () => {
@@ -57,9 +58,141 @@ document.addEventListener("DOMContentLoaded", () => {
           loadTemplate("expenses-list-template"); // Navigate back to expenses list
         });
       }
+    }else if(templateId === "login-template") {
+      document.getElementById("register-link").addEventListener("click", (e) => {
+          e.preventDefault();
+          loadTemplate("register-template");
+      });
+
+      document.getElementById("login-form").addEventListener("submit", handleLogin);
+  } else if (templateId === "register-template") {
+      document.getElementById("login-link").addEventListener("click", (e) => {
+          e.preventDefault();
+          loadTemplate("login-template");
+      });
+
+      document.getElementById("register-form").addEventListener("submit", handleRegister);
+  }
+};
+  
+
+  // ###############################################################################
+    // Function to handle login
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const userName = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
+
+    if (userName && password) {
+        let user = {
+            name: userName,
+            password: password
+        };
+
+        let sendLogin = new FXMLHttpRequest();
+        sendLogin.open("POST", "/users/connect");
+        sendLogin.send(JSON.stringify(user), () => {
+          console.log(sendLogin.responseText);
+            let response = JSON.parse(sendLogin.responseText);
+            if (response.success) {
+                alert("Login successful!");
+                fetchExpensesData()
+                userIcon.onclick = handleLogout
+                userIcon.src = "static/icons/log-out.svg";
+                loadTemplate('expenses-list-template')
+                
+            } else {
+                alert("Login failed: " + response.body);
+            }
+        });
     }
   };
-  
+
+  // Function to handle registration
+  const handleRegister = (event) => {
+      event.preventDefault();
+      const username = document.getElementById("reg-username").value;
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (username && email && password && confirmPassword) {
+          if (password === confirmPassword) {
+              let user = {
+                  name: username,
+                  email: email,
+                  password: password
+              };
+
+              let sendRegistration = new FXMLHttpRequest();
+              sendRegistration.open("POST", "/users/create");
+              sendRegistration.send(JSON.stringify(user), () => {
+                  let response = JSON.parse(sendRegistration.responseText);
+                  if (response.success) {
+                      alert("Registration successful!");
+                      loadTemplate("login-template");
+                      
+                  } else {
+                      alert("Registration failed: " + response.body);
+                  }
+              });
+          } else {
+              alert("Passwords do not match!");
+          }
+      }
+  };
+
+
+  function handleLogout() {
+    // let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    var request = new FXMLHttpRequest();
+    request.open("GET", "/users/currentUser");
+    request.send(null, () => {
+      let response = JSON.parse(request.responseText);
+      if (response.success) {
+        let currentUser_ = response.body;
+        let confirmLogout = confirm(`${currentUser_.name}, are you sure you want to log out?`);
+        if (confirmLogout) {
+          let logoutRequest = new FXMLHttpRequest();
+          logoutRequest.open("POST", "/usersServer/disconnect");
+          logoutRequest.send(null, () => {
+              let logoutResponse = JSON.parse(logoutRequest.responseText);
+              if (logoutResponse.success) {
+                alert("Logout successful!");
+                userIcon.src =  "static/icons/user.svg";
+                loadTemplate("login-template");
+          }else {
+              alert("Logout failed: " + logoutResponse.body);
+          }
+        });
+      }
+    } else {
+      alert(JSON.parse(request.responseText).body);
+    }
+  });
+        
+    
+    
+}
+
+  function pageInitialization(){
+    let request = new FXMLHttpRequest();
+    request.open("GET", "/users/currentUser");
+    request.send(null, () => {
+      let response = JSON.parse(request.responseText);
+      if (response.success) { // if axis user 
+        userIcon.src = "static/icons/log-out.svg"; // Change icon to log-out
+        userIcon.onclick = handleLogout
+        fetchExpensesData()
+        loadTemplate("expenses-list-template");
+      } else {
+        loadTemplate("login-template");
+      }
+    });
+  }
+
+  pageInitialization()
+// ###############################################################################
 
   // Render the Expenses List table (SORTED by Date & Time)
   const renderExpensesTable = () => {
@@ -143,21 +276,36 @@ document.addEventListener("DOMContentLoaded", () => {
       if (editingRowIndex !== null) {
         // Update existing expense
         var id = expenses[editingRowIndex].id
-        expenses[editingRowIndex] = newExpense;
+        
         var request = new FXMLHttpRequest();
         request.open("PUT","/expenses/expenses/" + id);
-        request.send(JSON.stringify(newExpense)); 
+        request.send(JSON.stringify(newExpense), () => {
+          if(JSON.parse(request.responseText).success){
+            expenses[editingRowIndex] = newExpense;
+            loadTemplate("expenses-list-template");
+          } else {
+            alert("Error updating expense: " + JSON.parse(request.responseText).body);
+          }
+          
+        }); 
         editingRowIndex = null; // Clear editing state
       } else {
         // Add new expense
         var request = new FXMLHttpRequest()
         request.open("POST","/expenses/expenses");
-        request.send(JSON.stringify(newExpense)); 
-        expenses.push(newExpense);
+        request.send(JSON.stringify(newExpense), () =>{
+          if(JSON.parse(request.responseText).success){
+            expenses.push(newExpense);
+            loadTemplate("expenses-list-template");
+          }else{
+            alert("Error adding expense: " + JSON.parse(request.responseText).body);
+          }
+        }); 
+        
       }
   
       // Return to Expenses List page
-      loadTemplate("expenses-list-template");
+      
     });
   };
   
@@ -206,17 +354,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // Delete an expense
   const deleteExpense = (index) => {
     var id = expenses[index].id
-    expenses.splice(index, 1); // Remove the expense from the array
     var request = new FXMLHttpRequest();
     request.open("DELETE","/expenses/expenses/" + id);
     console.log(index);
     console.log(id);
-    request.send();  // Send DELETE request to server
-    renderExpensesTable(); // Re-render the table
-  };
+    request.send(null, () => {
+      var response = JSON.parse(request.responseText);
+      if (response.success) {
+        expenses.splice(index, 1); // Remove the expense from the array
+        renderExpensesTable();
+      }
+      else {
+        alert("Error: " + response.body)
+      }
+  }); 
 
-  // Load the Expenses List template by default and fetch data
-  fetchExpensesData(); // Fetch JSON data
+  };
+  
 });
 
 
@@ -327,4 +481,8 @@ const populateMonthDropdown = (expenses) => {
     monthDropdown.innerHTML += `<option value="${month}">${month}</option>`;
   });
 };
+
+
+
+
 

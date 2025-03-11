@@ -5,12 +5,9 @@ class FXMLHttpRequest {
         this.responseText = "";
     }
 
-    open(method, url, async=true, username="", password = "") {
+    open(method, url) {
         this.method = method;
         this.url = url;
-        this.async = async;
-        this.username = username;
-        this.password = password;
     }
 
     send(data = null, callback = () => {}) {

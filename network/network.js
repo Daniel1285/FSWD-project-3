@@ -6,12 +6,12 @@ class Network {
         this.userServer = new UsersServer();
         this.expensesServer = new ExpensesServer();
         this.dropRate = 0.1;
-        this.minDelay = 0;
-        this.maxDelay = 0;
+        this.minDelay = 1000;
+        this.maxDelay = 3000;
     }
 
     async request(request, callback) {
-        await this.sleep(); // Proper delay before request
+        await this.sleep(); // delay before request
         console.log("Network request after sleep");
         if (Math.random() < this.dropRate) {
             request.responseText = JSON.stringify({ "success": false, body: "Network error" });
@@ -24,7 +24,7 @@ class Network {
         console.log("Network request serverType: ", serverType);
         if (serverType) {
             serverType.request(request, async () => {
-                await this.sleep(); // Proper delay after request processing
+                await this.sleep(); // delay after request processing
                 if (Math.random() < this.dropRate) {
                     request.responseText = JSON.stringify({ "success": false, body: "Network error" });
                 }
